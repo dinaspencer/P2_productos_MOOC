@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #1b1720;
 }
 
 .App-logo {
@@ -35,4 +36,17 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+#cabecera {
+  height: 120px;
+  background-color: #bbdf20;
+}
+
+#productosresultados li {
+  list-style-type: none;
+}
+
+.product-row {
+  padding: 36px;
 }
