@@ -1,23 +1,25 @@
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import Spinner from 'react-bootstrap/Spinner';
+import Header from './components/Header';
+import { mockdata } from './constants/products';
+import SearchPage from './components/SearchPage';
 
 function App() {
+
+  const products = mockdata.products;
+
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      {/* <Spinner animation="border" role="status">
+      <span className="visually-hidden">Loading...</span>
+    </Spinner> */}
+    <SearchPage theproducts={products} />
+
     </div>
   );
 }
