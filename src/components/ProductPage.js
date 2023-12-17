@@ -1,5 +1,5 @@
 
-
+import Location from '../Location';
 
 
 export default function ProductPage(props) {
@@ -8,6 +8,7 @@ export default function ProductPage(props) {
         <div>
             <h2>title</h2>
             <button>Volver</button>
+            <Location />
         </div>
     )
 }

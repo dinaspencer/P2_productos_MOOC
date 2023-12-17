@@ -1,9 +1,18 @@
+
+import { useRouteError } from "react-router-dom";
+
 export default function ErrorPage() {
-    return (
-        <div>
-        <h1>Error: Página No Encontrada</h1>
+  const error = useRouteError();
+  console.error(error);
+
+  return (
+    <div id="error-page">
+      <h1>Error: Página No Encontrada</h1>
         <p>Lo sentimos, la página que buscas no está aquí.</p>
-        <button>Volver</button>
-        </div>
-    )
+      <p>
+        <i>{error.statusText || error.message}</i>
+      </p>
+      <button>Volver</button>
+    </div>
+  );
 }
