@@ -8,12 +8,14 @@ import CardGroup from 'react-bootstrap/CardGroup';
 import {useState, useEffect} from 'react';
 import CONFIG from '../config/config';
 import Spinner from 'react-bootstrap/Spinner';
+import { Link} from 'react-router-dom';
+import { mockdata } from '../constants/products';
 
 
 
-export default function SearchPage(props) {
+export default function SearchPage() {
     
-  const theproducts = props.theproducts;
+  const theproducts = mockdata.products;
   
   const [selected, setSelected] = useState('All');
   const [searchValue, setSearchValue] = useState('');
@@ -21,70 +23,14 @@ export default function SearchPage(props) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  //CALL SERVER  GET PRODUCTS
-  // useEffect(()=>{
-  //   async function getProducts () {
-  //     if (CONFIG.use_server) {
-       
-  //         const response = await fetch("https://dummyjson.com/products");
-  //         const list = await response.json();
-          
-  //         setProductList(list.products);
-  //         setError(null);
-  //         console.log(productList);
-
-  //       } else if (!CONFIG.use_server) {
-         
-  //         setProductList(theproducts);
-  //         setError(null);
-  //         console.log(productList);
-  //   }
-    
-     
-  // }
-  // getProducts();
-
-  // }, []);
-
-  //FILTER RESULTS
-  
-  //   const filteredListSearch = productList.filter((product) => {
-  //      if (product.title.toLowerCase().includes(searchValue.toLowerCase()) || product.description.toLowerCase().includes(searchValue.toLowerCase())) {
-  //         return true;
-  //      }
-  //      return false; 
-  //    });
-  
-  // function searchChangeHandler() {
-  //   setProductList(filteredListSearch);
-  //   console.log(filteredListSearch);
-  // }
-
-  // const filteredListSelect = productList.filter((product) => {
-  //   if (product.category === selected) {
-  //     return true;
-  //   }
-  //   return false;
-  // });
-
-  // function selectChangeHandler() {
-  // setProductList(filteredListSelect);
-  //   console.log(filteredListSelect);
-  // }
-
-  function buttonHandler() {
-    console.log("open product page!")
-  }
 
 
-  async function callServer() {
-
-    // const url = CONFIG.server_url;
-
+//CALL SERVER
+  async function getProducts() {
    if (CONFIG.use_server) {
     setLoading(true);
     setTimeout(() => setLoading(false), 1000);
-      await fetch("https://dummyjson.com/products")
+      await fetch(CONFIG.server_url)
     
         .then(response => {
           if (response.status === 200) {
@@ -92,10 +38,8 @@ export default function SearchPage(props) {
           } else {
             const resp = response.json().then(data => data);
             resp.then(data => setError(data));
-          }
-          
+          } 
         })
-
         .then(data => {
           if (selected !== "All") setProductList(data.products.filter(product => product.category === selected))
 
@@ -113,19 +57,16 @@ export default function SearchPage(props) {
 
         })
         
-
     } else if (!CONFIG.use_server) {
 
-    setProductList(theproducts);
-
+    setProductList(theproducts);    
     setLoading(false);
-}
-  };
-
+    }
+  }
+  
+  //CALL SERVER ON LOAD
     useEffect(()=>{
-    
-  callServer();
-
+       getProducts();
   }, []);
 
     //TO FILTER THE DROPDOWN
@@ -153,10 +94,11 @@ export default function SearchPage(props) {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
              <Form.Control type="text" value={searchValue} placeholder="Escribe lo que quieres buscar" onChange={e=>setSearchValue(e.target.value)} /> 
             </Form.Group>
-            <Button variant="primary" onClick={callServer}>Buscar</Button>
+            <Button variant="primary" onClick={getProducts}>Buscar</Button>
             </Form>
         </Card.Body>
       </Card>
+     
       <Card style={{ padding: '24px' }}>
         <Card.Body>
           <Card.Title>Filtrar</Card.Title>
@@ -168,7 +110,7 @@ export default function SearchPage(props) {
             {filterCats.map(products=>{
                return <option className="category" key={products.category} value={products.category}>{products.category.toUpperCase()}  </option>})}
             </Form.Select>
-            <Button variant="primary" onClick={callServer}>Filtrar</Button>
+            <Button variant="primary" onClick={getProducts}>Filtrar</Button>
         </Card.Body>
       </Card>
     </CardGroup>
@@ -179,7 +121,7 @@ export default function SearchPage(props) {
             : 
             <ul>
             <Row xs={1} sm={2} md={3} lg={4} className="g-4 product-row">
-               {selected && productList.map(item=>{
+               {productList.map((item, index)=>{
                     return <li className="unproducto" key={item.id}> 
                     <Col>
                     <Card className="product-card">
@@ -187,8 +129,9 @@ export default function SearchPage(props) {
                     <Card.Body>
                     <Card.Title>{item.title}</Card.Title>
                     <Card.Text>{item.description.substr(0,22) + '...'}</Card.Text>
-                    {/* import Link and connect productId as param */}
-                    <Button variant="primary" onClick={buttonHandler}>VER</Button>
+                    <Link to={`products/${index}`}><Button variant="primary">
+                      VER</Button></Link>
+                      
                     </Card.Body>
                     </Card>
                     </Col>
@@ -200,8 +143,6 @@ export default function SearchPage(props) {
             }
           </div>
           
-
-
         </div>
     )
 }

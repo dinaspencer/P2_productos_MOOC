@@ -1,9 +1,10 @@
 
-import { useRouteError } from "react-router-dom";
+import { useRouteError, Link } from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 
 export default function ErrorPage() {
   const error = useRouteError();
-  console.error(error);
+ console.error(error);
 
   return (
     <div id="error-page">
@@ -12,7 +13,7 @@ export default function ErrorPage() {
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
-      <button>Volver</button>
+      <Link to="/"><Button>Volver</Button></Link>
     </div>
   );
 }

@@ -39,12 +39,18 @@
 }
 
 #cabecera {
+  padding: 30px;
   height: 120px;
   background-color: #bbdf20;
 }
 
+#cabecera a {
+  text-decoration: none;
+  color: black;
+}
+
 .spinner {
-  padding: 40px;
+  padding: 30px;
   margin-bottom: 400px;
   color: #bbdf20;
 }
@@ -59,4 +65,10 @@
 
 .product-row {
   padding: 36px;
+}
+
+#error-page {
+  background-color: #bbdf20;
+  padding: 300px 100px;
+
 }
