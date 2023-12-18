@@ -43,6 +43,16 @@
   background-color: #bbdf20;
 }
 
+.spinner {
+  padding: 40px;
+  margin-bottom: 400px;
+  color: #bbdf20;
+}
+
+#selector {
+  margin-bottom: 16px;
+}
+
 #productosresultados li {
   list-style-type: none;
 }

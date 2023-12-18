@@ -1,6 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import Spinner from 'react-bootstrap/Spinner';
 import Header from './components/Header';
 import { mockdata } from './constants/products';
 import SearchPage from './components/SearchPage';
@@ -14,7 +13,7 @@ import SearchPage from './components/SearchPage';
 function App() {
 
 
-  // const [loading, setLoading] = useState(false);
+  
   
 
   const products = mockdata.products;
@@ -24,9 +23,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Spinner animation="border" role="status" id="loading" className="spinner">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
+     
     <SearchPage theproducts={products} />
 
 
