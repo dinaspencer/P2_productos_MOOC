@@ -9,13 +9,12 @@ import {useState, useEffect} from 'react';
 import CONFIG from '../config/config';
 import Spinner from 'react-bootstrap/Spinner';
 import { Link} from 'react-router-dom';
-import { mockdata } from '../constants/products';
 
 
 
-export default function SearchPage() {
+export default function SearchPage(props) {
     
-  const theproducts = mockdata.products;
+  const theproducts = props.theproducts;
   
   const [selected, setSelected] = useState('All');
   const [searchValue, setSearchValue] = useState('');
@@ -29,7 +28,7 @@ export default function SearchPage() {
   async function getProducts() {
    if (CONFIG.use_server) {
     setLoading(true);
-    setTimeout(() => setLoading(false), 1000);
+    
       await fetch(CONFIG.server_url)
     
         .then(response => {
@@ -38,7 +37,8 @@ export default function SearchPage() {
           } else {
             const resp = response.json().then(data => data);
             resp.then(data => setError(data));
-          } 
+          }
+          
         })
         .then(data => {
           if (selected !== "All") setProductList(data.products.filter(product => product.category === selected))
@@ -46,7 +46,7 @@ export default function SearchPage() {
           else if (searchValue !== "") setProductList(data.products.filter(product => product.title.toLowerCase().includes(searchValue.toLowerCase())))
 
           else setProductList(data.products);
-
+          setTimeout(() => setLoading(false), CONFIG.loading_timeout_ms);
         })
 
         .catch(error => {
@@ -129,7 +129,10 @@ export default function SearchPage() {
                     <Card.Body>
                     <Card.Title>{item.title}</Card.Title>
                     <Card.Text>{item.description.substr(0,22) + '...'}</Card.Text>
-                    <Link to={`products/${index}`}><Button variant="primary">
+                    <Link 
+                    to={{pathname: `/products/${item.id-1}`}} 
+                    state={{item}}>
+                      <Button variant="primary">
                       VER</Button></Link>
                       
                     </Card.Body>
