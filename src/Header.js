@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import phone from '../phone.png';
+import phone from './phone.png';
 
 
 export default function Header() {

@@ -6,7 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import CardGroup from 'react-bootstrap/CardGroup';
 import {useState, useEffect} from 'react';
-import CONFIG from '../config/config';
+import CONFIG from './config/config';
 import Spinner from 'react-bootstrap/Spinner';
 import { Link} from 'react-router-dom';
 
@@ -25,7 +25,8 @@ export default function SearchPage(props) {
 
 
 //CALL SERVER
-  async function getProducts() {
+  async function getProducts(e) {
+   
    if (CONFIG.use_server) {
     setLoading(true);
     
@@ -41,12 +42,19 @@ export default function SearchPage(props) {
           
         })
         .then(data => {
-          if (selected !== "All") setProductList(data.products.filter(product => product.category === selected))
+          
+          if (selected !=="All"){ 
+            
+            setProductList(data.products.filter(product => product.category === selected));
 
-          else if (searchValue !== "") setProductList(data.products.filter(product => product.title.toLowerCase().includes(searchValue.toLowerCase())))
+          } 
+           if (searchValue !== "") {
 
-          else setProductList(data.products);
-          setTimeout(() => setLoading(false), CONFIG.loading_timeout_ms);
+           setProductList(data.products.filter(product => product.title.toLowerCase().includes(searchValue.toLowerCase())))
+
+          } else setProductList(data.products);
+          setLoading(false);
+          // setTimeout(() => setLoading(false), CONFIG.loading_timeout_ms);
         })
 
         .catch(error => {
@@ -61,6 +69,7 @@ export default function SearchPage(props) {
 
     setProductList(theproducts);    
     setLoading(false);
+    setError(error);
     }
   }
   
@@ -74,13 +83,33 @@ export default function SearchPage(props) {
       if (
         !accumulator.some(
           (item) => item.category === current.category
-          //  && item.name === current.name,
+           && item.name === current.name,
         )
       ) {
         accumulator.push(current);
       }
       return accumulator;
     }, []);
+
+
+  //FILTER SELECT
+     function onSelect(e) {
+      e.preventDefault();
+      let {name, value} = e.target;
+      setSelected({
+        [name]: value,
+      })
+      console.log(value);
+      
+        setProductList(productList.filter((product) => product.category === value));
+     
+      
+      console.log(productList);
+     
+     };
+
+    
+
 
 
     return (
@@ -91,10 +120,12 @@ export default function SearchPage(props) {
         <Card.Body>
           <Card.Title>Buscar</Card.Title>
             <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-             <Form.Control type="text" value={searchValue} placeholder="Escribe lo que quieres buscar" onChange={e=>setSearchValue(e.target.value)} /> 
+            <Form.Group className="mb-3" 
+            // controlId="exampleForm.ControlInput1"
+            >
+             <Form.Control type="text" id="filtro" value={searchValue} placeholder="Escribe lo que quieres buscar" onChange={e=>setSearchValue(e.target.value)} /> 
             </Form.Group>
-            <Button variant="primary" onClick={getProducts}>Buscar</Button>
+            <Button variant="primary" id="buscador" onClick={getProducts}>Buscar</Button>
             </Form>
         </Card.Body>
       </Card>
@@ -103,22 +134,27 @@ export default function SearchPage(props) {
         <Card.Body>
           <Card.Title>Filtrar</Card.Title>
           <Form.Select aria-label="Default select example" 
-          id="selector"
-          onChange={e => setSelected(e.target.value)}
+          id="selector" 
+          onChange={onSelect} 
+          // {e => setProductList(productList.filter((product) => product.category === e.target.value))}
+          // {e => setSelected(e.target.value)}
+         
           >
             <option value="All">All</option>
             {filterCats.map(products=>{
                return <option className="category" key={products.category} value={products.category}>{products.category.toUpperCase()}  </option>})}
             </Form.Select>
-            <Button variant="primary" onClick={getProducts}>Filtrar</Button>
+            {/* <Button variant="primary" onClick={getProducts}>Filtrar</Button> */}
         </Card.Body>
       </Card>
     </CardGroup>
            
-          <div id="productosresultados">
+          
+
             {loading ?  <Spinner animation="border" role="status" id="loading"  className="spinner">
       <span className="visually-hidden">Loading...</span></Spinner> 
-            : 
+            : <div id="productosresultados">
+            <h2 id="catálogo">Catálogo de Productos</h2>
             <ul>
             <Row xs={1} sm={2} md={3} lg={4} className="g-4 product-row">
                {productList.map((item, index)=>{
@@ -143,9 +179,8 @@ export default function SearchPage(props) {
                 )}
             </Row>
             </ul>
-            }
           </div>
-          
+          }
         </div>
     )
 }

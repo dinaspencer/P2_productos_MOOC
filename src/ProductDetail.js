@@ -1,4 +1,4 @@
-import Location from '../Location';
+import Location from './Location';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
@@ -28,9 +28,9 @@ export default function ProductDetail() {
                     <Card.Img variant="top" className="product-detail-image" style={{width: '300px'}} src={productInfo.item.images[0]} alt={productInfo.item.title} />
                     <Card.Title id="titulo" className="product-detail-title"><h1>{productInfo.item.title}</h1></Card.Title>
                    <h2>{origPrice.toFixed(2) + ' €'}</h2>
-                  {checkDiscount && <h4 style={{color: 'red'}}>{'Precio rebajado! Ahora solo ' + salePrice.toFixed(2) + ' €'}</h4>}
+                  {checkDiscount && <h4 style={{color: 'red'}}>{'SALE: Now only ' + salePrice.toFixed(2) + ' €'}</h4>}
                     <Card.Text>{productInfo.item.description}</Card.Text>
-                    <Link to="/"><Button variant="primary">
+                    <Link to="/"><Button variant="primary" id="volver">
                       Volver</Button></Link>  
                     </Card.Body>
                     
